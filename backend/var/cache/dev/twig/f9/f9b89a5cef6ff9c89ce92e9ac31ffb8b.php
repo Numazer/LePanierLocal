@@ -399,6 +399,6 @@ class __TwigTemplate_1d4b78e82466594ca14097986cd137ac extends Template
 {% endblock body_javascript %}
 </body>
 </html>
-", "@ApiPlatform/GraphQlPlayground/index.html.twig", "C:\\wamp64\\www\\LePanierLocal\\backend\\vendor\\api-platform\\symfony\\Bundle\\Resources\\views\\GraphQlPlayground\\index.html.twig");
+", "@ApiPlatform/GraphQlPlayground/index.html.twig", "D:\\Wampp\\SymfonyProjects\\LePanierLocal\\backend\\vendor\\api-platform\\symfony\\Bundle\\Resources\\views\\GraphQlPlayground\\index.html.twig");
     }
 }

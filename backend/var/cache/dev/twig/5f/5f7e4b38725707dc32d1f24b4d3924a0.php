@@ -264,6 +264,6 @@ class __TwigTemplate_68bcc6938615ddb3f794dd5007c48611 extends Template
 
 </body>
 </html>
-", "@ApiPlatform/Graphiql/index.html.twig", "C:\\wamp64\\www\\LePanierLocal\\backend\\vendor\\api-platform\\symfony\\Bundle\\Resources\\views\\Graphiql\\index.html.twig");
+", "@ApiPlatform/Graphiql/index.html.twig", "D:\\Wampp\\SymfonyProjects\\LePanierLocal\\backend\\vendor\\api-platform\\symfony\\Bundle\\Resources\\views\\Graphiql\\index.html.twig");
     }
 }

@@ -182,6 +182,6 @@ class __TwigTemplate_2cfd892bb2cd1cdead34b3b5e78b9bcc extends Template
         {% block body %}{% endblock %}
     </body>
 </html>
-", "base.html.twig", "C:\\wamp64\\www\\LePanierLocal\\backend\\templates\\base.html.twig");
+", "base.html.twig", "D:\\Wampp\\SymfonyProjects\\LePanierLocal\\backend\\templates\\base.html.twig");
     }
 }

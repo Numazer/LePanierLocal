@@ -514,6 +514,6 @@ class __TwigTemplate_c24c02a36bdac468e91b30cd4f224f0d extends Template
 
 </body>
 </html>
-", "@ApiPlatform/SwaggerUi/index.html.twig", "C:\\wamp64\\www\\LePanierLocal\\backend\\vendor\\api-platform\\symfony\\Bundle\\Resources\\views\\SwaggerUi\\index.html.twig");
+", "@ApiPlatform/SwaggerUi/index.html.twig", "D:\\Wampp\\SymfonyProjects\\LePanierLocal\\backend\\vendor\\api-platform\\symfony\\Bundle\\Resources\\views\\SwaggerUi\\index.html.twig");
     }
 }

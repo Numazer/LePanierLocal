@@ -20,7 +20,7 @@ services:
     networks:
       - symfony_network
     command: ["symfony", "server:start", "--dir=/var/www/backend/public", "--port=8000", "--allow-all-ip"]
-
+ 
   frontend:
     build:
       context: .
@@ -38,7 +38,7 @@ services:
     networks:
       - symfony_network
     command: ["npm", "start"]
-
+ 
   symfony-database:
     image: mysql:8.0
     container_name: symfony-database
@@ -60,7 +60,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+ 
   webdb:
       image: webdb/app
       container_name: ocishop-db-manager
@@ -71,10 +71,10 @@ services:
         - "$HOME/.ssh:/root/.ssh:ro"
         - "$HOME/.webdb:/usr/src/app/static/version"
       ports:
-        - "127.0.0.1:22071:22071" 
+        - "127.0.0.1:22071:22071"
       networks:
-        - symfony_network 
-
+        - symfony_network
+ 
   webserver:
     image: nginx:latest
     container_name: nginx-server
@@ -90,12 +90,11 @@ services:
       - frontend
     networks:
       - symfony_network
-
+ 
 volumes:
   db_data:
-
+ 
 networks:
   symfony_network:
     name: ocishop_symfony_network
     driver: bridge
-
