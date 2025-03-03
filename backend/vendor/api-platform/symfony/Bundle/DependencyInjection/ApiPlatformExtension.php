@@ -34,6 +34,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\FilterInterface;
 use ApiPlatform\Metadata\UriVariableTransformerInterface;
 use ApiPlatform\Metadata\UrlGeneratorInterface;
+use ApiPlatform\OpenApi\Model\Tag;
 use ApiPlatform\RamseyUuid\Serializer\UuidDenormalizer;
 use ApiPlatform\State\ApiResource\Error;
 use ApiPlatform\State\ParameterProviderInterface;
@@ -114,7 +115,7 @@ final class ApiPlatformExtension extends Extension implements PrependExtensionIn
         $jsonSchemaFormats = $config['jsonschema_formats'];
 
         if (!$jsonSchemaFormats) {
-            foreach (array_keys($formats) as $f) {
+            foreach (array_merge(array_keys($formats), array_keys($errorFormats)) as $f) {
                 // Distinct JSON-based formats must have names that start with 'json'
                 if (str_starts_with($f, 'json')) {
                     $jsonSchemaFormats[$f] = true;
@@ -500,6 +501,8 @@ final class ApiPlatformExtension extends Extension implements PrependExtensionIn
         $container->setParameter('api_platform.enable_swagger_ui', $config['enable_swagger_ui']);
         $container->setParameter('api_platform.enable_re_doc', $config['enable_re_doc']);
         $container->setParameter('api_platform.swagger.api_keys', $config['swagger']['api_keys']);
+        $container->setParameter('api_platform.swagger.persist_authorization', $config['swagger']['persist_authorization']);
+        $container->setParameter('api_platform.swagger.http_auth', $config['swagger']['http_auth']);
         if ($config['openapi']['swagger_ui_extra_configuration'] && $config['swagger']['swagger_ui_extra_configuration']) {
             throw new RuntimeException('You can not set "swagger_ui_extra_configuration" twice - in "openapi" and "swagger" section.');
         }
@@ -564,14 +567,17 @@ final class ApiPlatformExtension extends Extension implements PrependExtensionIn
     {
         $enabled = $this->isConfigEnabled($container, $config['graphql']);
         $graphqlIntrospectionEnabled = $enabled && $this->isConfigEnabled($container, $config['graphql']['introspection']);
-
         $graphiqlEnabled = $enabled && $this->isConfigEnabled($container, $config['graphql']['graphiql']);
         $graphqlPlayGroundEnabled = $enabled && $this->isConfigEnabled($container, $config['graphql']['graphql_playground']);
+        $maxQueryDepth = (int) $config['graphql']['max_query_depth'];
+        $maxQueryComplexity = (int) $config['graphql']['max_query_complexity'];
         if ($graphqlPlayGroundEnabled) {
             trigger_deprecation('api-platform/core', '3.1', 'GraphQL Playground is deprecated and will be removed in API Platform 4.0. Only GraphiQL will be available in the future. Set api_platform.graphql.graphql_playground to false in the configuration to remove this deprecation.');
         }
 
         $container->setParameter('api_platform.graphql.enabled', $enabled);
+        $container->setParameter('api_platform.graphql.max_query_depth', $maxQueryDepth);
+        $container->setParameter('api_platform.graphql.max_query_complexity', $maxQueryComplexity);
         $container->setParameter('api_platform.graphql.introspection.enabled', $graphqlIntrospectionEnabled);
         $container->setParameter('api_platform.graphql.graphiql.enabled', $graphiqlEnabled);
         $container->setParameter('api_platform.graphql.graphql_playground.enabled', $graphqlPlayGroundEnabled);
@@ -806,7 +812,11 @@ final class ApiPlatformExtension extends Extension implements PrependExtensionIn
             return;
         }
 
-        $clientClass = class_exists(\Elasticsearch\Client::class) ? \Elasticsearch\Client::class : \Elastic\Elasticsearch\Client::class;
+        $clientClass = !class_exists(\Elasticsearch\Client::class)
+            // ES v7
+            ? \Elastic\Elasticsearch\Client::class
+            // ES v8 and up
+            : \Elasticsearch\Client::class;
 
         $clientDefinition = new Definition($clientClass);
         $container->setDefinition('api_platform.elasticsearch.client', $clientDefinition);
@@ -847,6 +857,13 @@ final class ApiPlatformExtension extends Extension implements PrependExtensionIn
         $container->setParameter('api_platform.openapi.license.name', $config['openapi']['license']['name']);
         $container->setParameter('api_platform.openapi.license.url', $config['openapi']['license']['url']);
         $container->setParameter('api_platform.openapi.overrideResponses', $config['openapi']['overrideResponses']);
+
+        $tags = [];
+        foreach ($config['openapi']['tags'] as $tag) {
+            $tags[] = new Tag($tag['name'], $tag['description'] ?? null);
+        }
+
+        $container->setParameter('api_platform.openapi.tags', $tags);
 
         $loader->load('json_schema.xml');
     }

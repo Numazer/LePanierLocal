@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace ApiPlatform\Symfony\Bundle\DependencyInjection;
 
 use ApiPlatform\Doctrine\Common\Filter\OrderFilterInterface;
-use ApiPlatform\Elasticsearch\State\Options;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Exception\InvalidArgumentException;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Tag;
 use ApiPlatform\Symfony\Controller\MainController;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle;
@@ -165,7 +165,7 @@ final class Configuration implements ConfigurationInterface
         $this->addExceptionToStatusSection($rootNode);
 
         $this->addFormatSection($rootNode, 'formats', [
-            'jsonld' => ['mime_types' => ['application/ld+json']]
+            'jsonld' => ['mime_types' => ['application/ld+json']],
         ]);
         $this->addFormatSection($rootNode, 'patch_formats', [
             'json' => ['mime_types' => ['application/merge-patch+json']],
@@ -267,6 +267,10 @@ final class Configuration implements ConfigurationInterface
                         ->arrayNode('introspection')
                             ->canBeDisabled()
                         ->end()
+                        ->integerNode('max_query_depth')->defaultValue(20)
+                        ->end()
+                        ->integerNode('max_query_complexity')->defaultValue(500)
+                        ->end()
                         ->scalarNode('nesting_separator')->defaultValue('_')->info('The separator to use to filter nested fields.')->end()
                         ->arrayNode('collection')
                             ->addDefaultsIfNotSet()
@@ -290,6 +294,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('swagger')
                     ->addDefaultsIfNotSet()
                     ->children()
+                        ->booleanNode('persist_authorization')->defaultValue(false)->info('Persist the SwaggerUI Authorization in the localStorage.')->end()
                         ->arrayNode('versions')
                             ->info('The active versions of OpenAPI to be exported or used in Swagger UI. The first value is the default.')
                             ->defaultValue($supportedVersions)
@@ -326,6 +331,24 @@ final class Configuration implements ConfigurationInterface
                                     ->enumNode('type')
                                         ->info('Whether the api key should be a query parameter or a header.')
                                         ->values(['query', 'header'])
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('http_auth')
+                            ->info('Creates http security schemes for OpenAPI.')
+                            ->useAttributeAsKey('key')
+                            ->validate()
+                                ->ifTrue(static fn ($v): bool => (bool) array_filter(array_keys($v), fn ($item) => !preg_match('/^[a-zA-Z0-9._-]+$/', $item)))
+                                ->thenInvalid('The api keys "key" is not valid according to the pattern enforced by OpenAPI 3.1 ^[a-zA-Z0-9._-]+$.')
+                            ->end()
+                            ->prototype('array')
+                                ->children()
+                                    ->scalarNode('scheme')
+                                        ->info('The OpenAPI HTTP auth scheme, for example "bearer"')
+                                    ->end()
+                                    ->scalarNode('bearerFormat')
+                                        ->info('The OpenAPI HTTP bearer format')
                                     ->end()
                                 ->end()
                             ->end()
@@ -447,7 +470,12 @@ final class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->ifTrue()
                                 ->then(static function (bool $v): bool {
-                                    if (!(class_exists(\Elasticsearch\Client::class) || class_exists(\Elastic\Elasticsearch\Client::class))) {
+                                    if (
+                                        // ES v7
+                                        !class_exists(\Elasticsearch\Client::class)
+                                        // ES v8 and up
+                                        && !class_exists(\Elastic\Elasticsearch\Client::class)
+                                    ) {
                                         throw new InvalidConfigurationException('The elasticsearch/elasticsearch package is required for Elasticsearch support.');
                                     }
 
@@ -481,6 +509,15 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->scalarNode('termsOfService')->defaultNull()->info('A URL to the Terms of Service for the API. MUST be in the format of a URL.')->end()
+                        ->arrayNode('tags')
+                            ->info('Global OpenApi tags overriding the default computed tags if specified.')
+                            ->prototype('array')
+                                ->children()
+                                    ->scalarNode('name')->isRequired()->end()
+                                    ->scalarNode('description')->defaultNull()->end()
+                                ->end()
+                            ->end()
+                        ->end()
                         ->arrayNode('license')
                         ->addDefaultsIfNotSet()
                             ->children()
