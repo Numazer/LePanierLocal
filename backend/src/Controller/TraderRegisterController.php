@@ -3,6 +3,8 @@
 namespace App\Controller;
  
 use App\Entity\Trader;
+use App\Entity\Category;
+use App\Entity\SubCategory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,10 +30,11 @@ class TraderRegisterController extends AbstractController
         if (!isset($data['email'], $data['plainPassword'], $data['name'])) {
             return new JsonResponse(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
         }
- 
+
         $trader = new Trader();
         $trader->setName($data['name']);
         $trader->setEmail($data['email']);
+        $trader->setDescription($data['description']);
         $plainPassword = $data['plainPassword'];
  
         $trader->setCreatedAt(new \DateTimeImmutable());
@@ -50,6 +53,27 @@ class TraderRegisterController extends AbstractController
             }
             return new JsonResponse(['errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
         }
+
+        
+        if (isset($data['category'])) {
+            $category = $entityManager->getRepository(Category::class)->find($data['category']);
+            if ($category) {
+                $trader->setCategory($category);
+            } else {
+                return new JsonResponse(['error' => 'Invalid category ID'], Response::HTTP_BAD_REQUEST);
+            }
+        }
+    
+        // Fetch and set the SubCategory entity
+        if (isset($data['sub_category'])) {
+            $subCategory = $entityManager->getRepository(SubCategory::class)->find($data['sub_category']);
+            if ($subCategory) {
+                $trader->setSubCategory($subCategory);
+            } else {
+                return new JsonResponse(['error' => 'Invalid sub-category ID'], Response::HTTP_BAD_REQUEST);
+            }
+        }
+ 
  
         $entityManager->persist($trader);
         $entityManager->flush();

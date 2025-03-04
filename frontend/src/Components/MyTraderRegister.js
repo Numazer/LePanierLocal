@@ -13,6 +13,7 @@ const MyTraderRegister = () => {
     { name: 'email', label: 'Email : ', type: 'email', placeholder: 'Entrer votre email', required: true },
     { name: 'password', label: 'Mot de Passe : ', type: 'password', placeholder: 'Écrire votre mot de passe', required: true },
     { name: 'confirm-password', label: 'Confirmer le Mot de Passe : ', type: 'password', placeholder: 'Retapez votre mot de passe', required: true },
+    { name: 'description', label: 'description : ', type: 'description', placeholder: 'description', required: true },
   ];
 
   // Fonction de soumission
@@ -29,6 +30,7 @@ const MyTraderRegister = () => {
         {
           name: formData.name,
           email: formData.email,
+          description: formData.description,
           plainPassword: formData.password,
         },
         {
