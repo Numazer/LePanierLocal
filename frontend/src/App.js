@@ -15,6 +15,7 @@ import Forum from './Components/Forum';
 import CGV from './Components/CGV';
 import CGU from './Components/CGU';
 //import Contact from './Components/Contact';
+import ProfilTrader from './Components/ProfilTrader';
 
  
  
@@ -49,6 +50,7 @@ function App() {
         <Route path="/CGV" element={<CGV />} />
         <Route path="/CGU" element={<CGU />} />
         {/* <Route path="/Contact" element={<Contact/>} /> */}
+        <Route path='ProfilTrader' element={<ProfilTrader/>} />
  
       </Routes>
     </Router>
