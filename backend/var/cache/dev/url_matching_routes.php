@@ -13,6 +13,7 @@ return [
         '/api/products' => [[['_route' => 'add_product', '_controller' => 'App\\Controller\\ProductController::addProduct'], null, ['POST' => 0], null, false, false, null]],
         '/api/size' => [[['_route' => 'api_size', '_controller' => 'App\\Controller\\SizeController::getSizes'], null, null, null, false, false, null]],
         '/api/subcategories' => [[['_route' => 'api_subcategories', '_controller' => 'App\\Controller\\SubCategoryController::getSubCategories'], null, null, null, false, false, null]],
+        '/api/traders' => [[['_route' => 'create_trader', '_controller' => 'App\\Controller\\TraderController::createTrader'], null, ['POST' => 0], null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

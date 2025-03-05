@@ -447,6 +447,13 @@
         <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\SubCategoryController"/>
       </call>
     </service>
+    <service id="App\Controller\TraderController" class="App\Controller\TraderController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\TraderController"/>
+      </call>
+    </service>
     <service id="App\Repository\CartProductRepository" class="App\Repository\CartProductRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -550,7 +557,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.Yw1MA4v"/>
+      <argument type="service" id=".service_locator.diDh9pW"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -1937,7 +1944,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.Yw1MA4v"/>
+      <argument type="service" id=".service_locator.diDh9pW"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -5943,6 +5950,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\SubCategoryController" class="App\Controller\SubCategoryController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\SubCategoryController" class="App\Controller\SubCategoryController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\SubCategoryController" class="App\Controller\SubCategoryController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TraderController" class="App\Controller\TraderController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TraderController" class="App\Controller\TraderController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\TraderController" class="App\Controller\TraderController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CartProductRepository" class="App\Repository\CartProductRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\CartProductRepository" class="App\Repository\CartProductRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CartRepository" class="App\Repository\CartRepository" autowire="true" abstract="true"/>
@@ -6585,7 +6595,13 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator..IVzQrD" method="withContext"/>
     </service>
-    <service id=".service_locator.Yw1MA4v" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.egipcEH.App\Controller\TraderController::createTrader()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\TraderController::createTrader()"/>
+      <argument>App\Controller\TraderController::createTrader()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.egipcEH" method="withContext"/>
+    </service>
+    <service id=".service_locator.diDh9pW" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
@@ -6597,6 +6613,7 @@
         <argument key="App\Controller\ProductController::addProduct" type="service_closure" id=".service_locator.egipcEH.App\Controller\ProductController::addProduct()"/>
         <argument key="App\Controller\SizeController::getSizes" type="service_closure" id=".service_locator.0OVTmbO.App\Controller\SizeController::getSizes()"/>
         <argument key="App\Controller\SubCategoryController::getSubCategories" type="service_closure" id=".service_locator..IVzQrD.App\Controller\SubCategoryController::getSubCategories()"/>
+        <argument key="App\Controller\TraderController::createTrader" type="service_closure" id=".service_locator.egipcEH.App\Controller\TraderController::createTrader()"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
         <argument key="App\Controller\CategoryController:getCategories" type="service_closure" id=".service_locator.MTCWnA5.App\Controller\CategoryController::getCategories()"/>
@@ -6604,6 +6621,7 @@
         <argument key="App\Controller\ProductController:addProduct" type="service_closure" id=".service_locator.egipcEH.App\Controller\ProductController::addProduct()"/>
         <argument key="App\Controller\SizeController:getSizes" type="service_closure" id=".service_locator.0OVTmbO.App\Controller\SizeController::getSizes()"/>
         <argument key="App\Controller\SubCategoryController:getSubCategories" type="service_closure" id=".service_locator..IVzQrD.App\Controller\SubCategoryController::getSubCategories()"/>
+        <argument key="App\Controller\TraderController:createTrader" type="service_closure" id=".service_locator.egipcEH.App\Controller\TraderController::createTrader()"/>
       </argument>
     </service>
     <service id=".service_locator.ea.H0ae" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -6838,6 +6856,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.ZyP9f7K" method="withContext"/>
     </service>
+    <service id=".service_locator.ZyP9f7K.App\Controller\TraderController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\TraderController"/>
+      <argument>App\Controller\TraderController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ZyP9f7K" method="withContext"/>
+    </service>
     <service id=".service_locator.RTjHFcp" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -7034,6 +7058,7 @@
           <argument>App\Controller\ProductController</argument>
           <argument>App\Controller\SizeController</argument>
           <argument>App\Controller\SubCategoryController</argument>
+          <argument>App\Controller\TraderController</argument>
           <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
         </argument>
       </call>
@@ -8084,7 +8109,7 @@
     <service id="Twig\Environment" alias="twig"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.Yw1MA4v"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.diDh9pW"/>
     <service id="api_platform.name_converter" alias="api_platform.hydra.name_converter.hydra_prefix"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
