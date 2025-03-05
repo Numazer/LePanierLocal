@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+.bg-custom {
+  background-color: #740000;
+}
+ 
+.navbar-nav .nav-link {
+  color: white !important;
+}
+ 
+.navbar-nav .nav-link:hover {
+  color: #ffffff !important;
+}
+ 
+/* style blanc du menu burger */
+.custom-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+ 
+.search-input {
+  border-radius: 15px;
+  width: 350px;
+}
+
+
+/* Assurer que la navbar reste en haut et soit fixe */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* La navbar doit être au-dessus du reste du contenu */
+}
+
+
+
